@@ -1,12 +1,14 @@
 export default async function handler(req, res) {
   try {
-    const response = await fetch("https://www.camsoda.com/api/v1/broadcasters/online");
+    const url = 'https://feed.camsoda.com/api/v1/browse/online_embed?id=market4strip&length=50';
+
+    const response = await fetch(url);
     const contentType = response.headers.get('content-type');
 
     if (!contentType || !contentType.includes('application/json')) {
       const text = await response.text();
       console.error('CamSoda API non-JSON response:', response.status, text);
-      return res.status(500).json({ error: 'Non-JSON response', status: response.status });
+      return res.status(500).json({ error: 'Non-JSON response', status: response.status, body: text });
     }
 
     const data = await response.json();

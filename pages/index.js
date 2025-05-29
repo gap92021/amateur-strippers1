@@ -4,6 +4,7 @@ import Head from "next/head";
 export default function Home() {
   const [chaturbateModels, setChaturbateModels] = useState([]);
   const [cambuilderModels, setCambuilderModels] = useState([]);
+  const [camsodaModels, setCamsodaModels] = useState([]);
 
   useEffect(() => {
     async function fetchChaturbate() {
@@ -26,15 +27,26 @@ export default function Home() {
       }
     }
 
+    async function fetchCamSoda() {
+      try {
+        const res = await fetch("/api/camsoda");
+        const data = await res.json();
+        setCamsodaModels(data.results || []);
+      } catch (error) {
+        console.error("Error fetching CamSoda models:", error);
+      }
+    }
+
     fetchChaturbate();
     fetchCamBuilder();
+    fetchCamSoda();
   }, []);
 
   return (
     <div>
       <Head>
         <title>Amateur Strippers</title>
-        <meta name="description" content="Live webcam models from Chaturbate and CamBuilder (Streamate)" />
+        <meta name="description" content="Live webcam models from Chaturbate, CamBuilder (Streamate), and CamSoda" />
       </Head>
 
       <main>
@@ -60,6 +72,19 @@ export default function Home() {
               <h2>{model.Name}</h2>
               <a href={model.PublicProfileURL} target="_blank" rel="noopener noreferrer">
                 Visit Profile
+              </a>
+            </div>
+          ))}
+        </div>
+
+        <h1>Top CamSoda Models</h1>
+        <div className="model-grid">
+          {camsodaModels.map((model, index) => (
+            <div key={index} className="model-card">
+              <img src={model.image_url} alt={model.username} width={200} />
+              <h2>{model.username}</h2>
+              <a href={`https://www.camsoda.com/${model.username}`} target="_blank" rel="noopener noreferrer">
+                Visit Room
               </a>
             </div>
           ))}
