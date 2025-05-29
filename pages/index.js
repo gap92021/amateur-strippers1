@@ -9,7 +9,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchChaturbate() {
       try {
-        const res = await fetch("/api/chaturbate");
+        const res = await fetch("https://api.chaturbate.com/public/affiliates/onlinerooms/?wm=Ngr0e&client_ip=request_ip&format=json&limit=20");
         const data = await res.json();
         setChaturbateModels(data.results || []);
       } catch (error) {
@@ -29,7 +29,7 @@ export default function Home() {
 
     async function fetchCamSoda() {
       try {
-        const res = await fetch("/api/camsoda");
+        const res = await fetch("https://www.camsoda.com/api/v1/broadcasters/online");
         const data = await res.json();
         setCamsodaModels(data.result?.slice(0, 8) || []);
       } catch (error) {
