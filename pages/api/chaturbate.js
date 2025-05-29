@@ -5,8 +5,8 @@ export default async function handler(req, res) {
 
     if (!contentType || !contentType.includes('application/json')) {
       const text = await response.text();
-      console.error('Chaturbate API returned non-JSON:', response.status, text);
-      return res.status(500).json({ error: 'Chaturbate API did not return JSON', status: response.status, body: text });
+      console.error('Chaturbate API non-JSON response:', response.status, text);
+      return res.status(500).json({ error: 'Non-JSON response', status: response.status });
     }
 
     const data = await response.json();
