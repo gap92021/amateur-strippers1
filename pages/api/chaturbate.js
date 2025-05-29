@@ -1,12 +1,15 @@
 export default async function handler(req, res) {
   try {
-    const response = await fetch("https://api.chaturbate.com/public/affiliates/onlinerooms/?wm=Ngr0e&client_ip=request_ip&format=json&limit=20");
+    const clientIp = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress || 'request_ip';
+    const url = `https://chaturbate.com/api/public/affiliates/onlinerooms/?wm=Ngr0e&client_ip=${clientIp}&format=json&limit=20`;
+
+    const response = await fetch(url);
     const contentType = response.headers.get('content-type');
 
     if (!contentType || !contentType.includes('application/json')) {
       const text = await response.text();
       console.error('Chaturbate API non-JSON response:', response.status, text);
-      return res.status(500).json({ error: 'Non-JSON response', status: response.status });
+      return res.status(500).json({ error: 'Non-JSON response', status: response.status, body: text });
     }
 
     const data = await response.json();
