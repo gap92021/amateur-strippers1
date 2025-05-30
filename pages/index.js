@@ -2,34 +2,91 @@ import React, { useEffect, useState } from "react";
 import Head from "next/head";
 
 export default function Home() {
+  const [chaturbateModels, setChaturbateModels] = useState([]);
   const [cambuilderModels, setCambuilderModels] = useState([]);
+  const [camsodaModels, setCamsodaModels] = useState([]);
 
   useEffect(() => {
+    async function fetchChaturbate() {
+      try {
+        const res = await fetch("/api/chaturbate");
+        const data = await res.json();
+        setChaturbateModels(data.results || []);
+      } catch (error) {
+        console.error("Error fetching Chaturbate models:", error);
+      }
+    }
+
     async function fetchCamBuilder() {
       try {
         const res = await fetch("/api/cambuilder");
         const data = await res.json();
-        console.log("Sample CamBuilder model:", data[0]);
         setCambuilderModels(data);
       } catch (error) {
         console.error("Error fetching CamBuilder models:", error);
       }
     }
+
+    async function fetchCamSoda() {
+      try {
+        const res = await fetch("/api/camsoda");
+        const data = await res.json();
+        setCamsodaModels(data.results || []);
+      } catch (error) {
+        console.error("Error fetching CamSoda models:", error);
+      }
+    }
+
+    fetchChaturbate();
     fetchCamBuilder();
+    fetchCamSoda();
   }, []);
 
   return (
     <div>
       <Head>
-        <title>Amateur Strippers Debug</title>
+        <title>Amateur Strippers</title>
+        <meta name="description" content="Live webcam models from Chaturbate, CamBuilder (Streamate), and CamSoda" />
       </Head>
 
       <main>
-        <h1>CamBuilder Debug Mode</h1>
+        <h1>Top Chaturbate Models</h1>
+        <div className="model-grid">
+          {chaturbateModels.map((model, index) => (
+            <div key={index} className="model-card">
+              <img src={model.image_url_360x270} alt={model.username} width={200} />
+              <h2>{model.username}</h2>
+              <p>{model.room_subject}</p>
+              <a href={model.chat_room_url} target="_blank" rel="noopener noreferrer">
+                Visit Room
+              </a>
+            </div>
+          ))}
+        </div>
+
+        <h1>Top CamBuilder (Streamate) Models</h1>
         <div className="model-grid">
           {cambuilderModels.map((model, index) => (
             <div key={index} className="model-card">
-              <p>Check console for full model details</p>
+              <img src={model.StaticBioPic} alt={model.Name} width={200} />
+              <h2>{model.Name}</h2>
+              <a href={model.PublicProfileURL} target="_blank" rel="noopener noreferrer">
+                Visit Profile
+              </a>
+            </div>
+          ))}
+        </div>
+
+        <h1>Top CamSoda Models</h1>
+        <div className="model-grid">
+          {camsodaModels.map((model, index) => (
+            <div key={index} className="model-card">
+              <img src={model.thumb} alt={model.username} width={200} />
+              <h2>{model.name}</h2>
+              <p>{model.subject}</p>
+              <a href={`https://www.camsoda.com/${model.username}`} target="_blank" rel="noopener noreferrer">
+                Visit Room
+              </a>
             </div>
           ))}
         </div>
@@ -53,6 +110,9 @@ export default function Home() {
           border-radius: 8px;
           padding: 1rem;
           text-align: center;
+        }
+        img {
+          border-radius: 8px;
         }
       `}</style>
     </div>
