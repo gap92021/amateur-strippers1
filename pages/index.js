@@ -31,6 +31,7 @@ export default function Home() {
       try {
         const res = await fetch("/api/camsoda");
         const data = await res.json();
+        console.log("CamSoda API data:", data);
         setCamsodaModels(data.results || []);
       } catch (error) {
         console.error("Error fetching CamSoda models:", error);
@@ -77,7 +78,7 @@ export default function Home() {
           ))}
         </div>
 
-        <h1>Top CamSoda Models</h1>
+        <h1>Top CamSoda Models (Debug Mode)</h1>
         <div className="model-grid">
           {camsodaModels.map((model, index) => (
             <div key={index} className="model-card">
