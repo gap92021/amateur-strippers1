@@ -24,7 +24,10 @@ export default async function handler(req, res) {
     });
 
     const xmlText = await response.text();
+    console.log("Raw CamBuilder XML response:", xmlText);
+
     const jsonResult = await xml2js.parseStringPromise(xmlText, { explicitArray: false });
+    console.log("Parsed CamBuilder JSON:", JSON.stringify(jsonResult, null, 2));
 
     const performers = jsonResult?.SMLResponse?.AvailablePerformers?.Performer || [];
     const formatted = Array.isArray(performers) ? performers : [performers];
