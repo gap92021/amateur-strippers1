@@ -21,6 +21,7 @@ export default function Home() {
       try {
         const res = await fetch("/api/cambuilder");
         const data = await res.json();
+        console.log("Sample CamBuilder model:", data[0]);
         setCambuilderModels(data);
       } catch (error) {
         console.error("Error fetching CamBuilder models:", error);
@@ -64,15 +65,11 @@ export default function Home() {
           ))}
         </div>
 
-        <h1>Top CamBuilder (Streamate) Models</h1>
+        <h1>Top CamBuilder (Streamate) Models (Debug Mode)</h1>
         <div className="model-grid">
           {cambuilderModels.map((model, index) => (
             <div key={index} className="model-card">
-              <img src={model.StaticBioPic} alt={model.Name} width={200} />
-              <h2>{model.Name}</h2>
-              <a href={model.PublicProfileURL} target="_blank" rel="noopener noreferrer">
-                Visit Profile
-              </a>
+              <p>Check console for field details</p>
             </div>
           ))}
         </div>
