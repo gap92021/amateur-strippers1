@@ -81,7 +81,7 @@ export default function Home() {
         <div className="model-grid">
           {camsodaModels.map((model, index) => (
             <div key={index} className="model-card">
-              <img src={model.image_url} alt={model.username} width={200} />
+              <img src={model.preview_image_url || model.image_url} alt={model.username} width={200} />
               <h2>{model.username}</h2>
               <a href={`https://www.camsoda.com/${model.username}`} target="_blank" rel="noopener noreferrer">
                 Visit Room
